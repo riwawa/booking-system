@@ -26,7 +26,7 @@ Multi-tenant: um deploy, múltiplos clientes, cada um com sua URL e configuraç�
 ### Setup
 
 ```bash
-git clone <repo> && cd booking-system
+git clone https://github.com/riwawa/booking-system && cd booking-system
 
 # instala dependências
 pnpm install
