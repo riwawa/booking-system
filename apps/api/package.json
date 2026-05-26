@@ -1,0 +1,40 @@
+{
+  "name": "api",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx --tsconfig tsconfig.json watch src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@booking/types": "workspace:*",
+    "@booking/utils": "workspace:*",
+    "@prisma/client": "^5.22.0",
+    "fastify": "^5.1.0",
+    "@fastify/jwt": "^9.0.1",
+    "@fastify/cors": "^10.0.1",
+    "@fastify/rate-limit": "^10.1.1",
+    "@fastify/helmet": "^13.0.0",
+    "bullmq": "^5.34.8",
+    "ioredis": "^5.4.1",
+    "zod": "^3.23.8",
+    "bcryptjs": "^2.4.3",
+    "mercadopago": "^2.2.2",
+    "resend": "^4.0.1",
+    "date-fns": "^3.6.0",
+    "date-fns-tz": "^3.2.0",
+    "pino": "^9.5.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/bcryptjs": "^2.4.6",
+    "typescript": "^5.7.2",
+    "tsx": "^4.19.2",
+    "vitest": "^2.1.8",
+    "prisma": "^5.22.0"
+  }
+}
