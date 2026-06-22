@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const Redis = require('ioredis')
+import { Redis } from 'ioredis'
 
 export const redis = new Redis({
   host: process.env.REDIS_HOST ?? 'localhost',
