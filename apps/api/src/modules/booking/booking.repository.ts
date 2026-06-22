@@ -30,9 +30,8 @@ export async function findBookingById(id: string) {
 export async function findBookingsByTenant(tenantId: string, date?: string) {
   const where: any = { tenantId }
   if (date) {
-    const d = new Date(date)
-    const start = new Date(d); start.setHours(0,0,0,0)
-    const end = new Date(d); end.setHours(23,59,59,999)
+    const start = new Date(`${date}T00:00:00.000Z`)
+    const end = new Date(`${date}T23:59:59.999Z`)
     where.startsAt = { gte: start, lte: end }
   }
   return prisma.booking.findMany({

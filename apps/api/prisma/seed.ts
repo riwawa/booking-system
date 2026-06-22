@@ -72,23 +72,25 @@ async function main() {
     })),
   })
 
-  await prisma.service.upsert({
-    where: { id: 'seed-service-1' },
-    update: {},
-    create: {
-      id: 'seed-service-1',
-      tenantId: tenant.id,
-      name: 'Consulta Padrão',
-      description: 'Atendimento de 30 minutos',
-      durationMin: 30,
-      price: 150.00,
-      currency: 'BRL',
-      requiresPayment: true,
-      bufferAfterMin: 10,
-      active: true,
-    },
+  const existingService = await prisma.service.findFirst({
+    where: { tenantId: tenant.id, name: 'Consulta Padrão' },
   })
 
+  if (!existingService) {
+    await prisma.service.create({
+      data: {
+        tenantId: tenant.id,
+        name: 'Consulta Padrão',
+        description: 'Atendimento de 30 minutos',
+        durationMin: 30,
+        price: 150.0,
+        currency: 'BRL',
+        requiresPayment: true,
+        bufferAfterMin: 10,
+        active: true,
+      },
+    })
+  }
   console.log('Seed concluído!')
   console.log(`Tenant: demo | Owner: owner@demo.com / demo1234`)
   console.log(`Provider: provider@demo.com / demo1234`)
