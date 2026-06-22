@@ -14,17 +14,18 @@ const STATUS_MAP: Record<string, { label: string; color: string }> = {
 }
 
 export default function DashboardPage() {
-  const { user, logout, isAuthenticated } = useAuth()
+  const { user, logout, isAuthenticated, ready } = useAuth()
   const [bookings, setBookings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [date, setDate] = useState(new Date().toISOString().split('T')[0])
 
   useEffect(() => {
+    if (!ready) return
     if (!isAuthenticated) { window.location.href = '/login'; return }
     setLoading(true)
     bookingApi.list({ date }).then(setBookings).finally(() => setLoading(false))
-  }, [date, isAuthenticated])
-
+  }, [date, isAuthenticated, ready])
+  
   const stats = {
     total: bookings.length,
     confirmed: bookings.filter(b => b.status === 'confirmed').length,

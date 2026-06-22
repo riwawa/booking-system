@@ -1,20 +1,32 @@
 'use client'
+import { useEffect, useState } from 'react'
 
 export function useAuth() {
-  const getToken = () => typeof window !== 'undefined' ? localStorage.getItem('token') : null
-  const getUser = () => {
-    if (typeof window === 'undefined') return null
-    try { return JSON.parse(localStorage.getItem('user') ?? 'null') } catch { return null }
-  }
+  const [token, setToken] = useState<string | null>(null)
+  const [user, setUser] = useState<any>(null)
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    setToken(localStorage.getItem('token'))
+    try {
+      setUser(JSON.parse(localStorage.getItem('user') ?? 'null'))
+    } catch {
+      setUser(null)
+    }
+    setReady(true)
+  }, [])
+
   const login = (token: string, user: any) => {
     localStorage.setItem('token', token)
     localStorage.setItem('user', JSON.stringify(user))
-    window.location.reload()
+    window.location.href = '/dashboard'
   }
+
   const logout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     window.location.href = '/login'
   }
-  return { token: getToken(), user: getUser(), login, logout, isAuthenticated: !!getToken() }
+
+  return { token, user, login, logout, isAuthenticated: !!token, ready }
 }

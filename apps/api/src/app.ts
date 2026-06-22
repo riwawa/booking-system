@@ -11,6 +11,7 @@ import { paymentRoutes } from './modules/payment/payment.routes.js'
 import { notificationWorker } from './workers/notification.worker.js'
 import { redis } from './lib/redis.js'
 import { ZodError } from 'zod'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL ?? 'info' } })
 
@@ -25,11 +26,11 @@ await app.register(fastifyJwt, {
   sign: { expiresIn: '7d' },
 })
 
-app.decorate('authenticate', async (req: any, reply: any) => {
+app.decorate('authenticate', async (req: FastifyRequest, reply: FastifyReply) => {
   try { await req.jwtVerify() } catch (e) { reply.send(e) }
 })
 
-app.setErrorHandler((error, _req, reply) => {
+app.setErrorHandler((error: Error & { statusCode?: number }, _req, reply) => {
   if (error instanceof ZodError) {
     return reply.status(400).send({ error: 'VALIDATION_ERROR', issues: error.issues })
   }
@@ -38,7 +39,7 @@ app.setErrorHandler((error, _req, reply) => {
     INVALID_STATUS_TRANSITION: 422, BOOKING_NOT_PENDING: 422,
     INVALID_CREDENTIALS: 401, EMAIL_TAKEN: 409, SLUG_TAKEN: 409,
   }
-  const status = statusMap[error.message] ?? (error as any).statusCode ?? 500
+  const status = statusMap[error.message] ?? error.statusCode ?? 500
   if (status >= 500) app.log.error(error)
   return reply.status(status).send({ error: error.message })
 })
@@ -57,7 +58,6 @@ process.on('SIGTERM', shutdown)
 try {
   const port = Number(process.env.PORT ?? 3001)
   await app.listen({ port, host: '0.0.0.0' })
-  console.log(`API: http://localhost:${port}`)
 } catch (err) {
   app.log.error(err)
   process.exit(1)

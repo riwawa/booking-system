@@ -1,5 +1,6 @@
 import { prisma } from '../../lib/prisma.js'
-import type { BookingStatus } from '@prisma/client'
+
+type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'no_show'
 
 export async function findConflictingBookings(providerId: string, startsAt: Date, endsAt: Date) {
   return prisma.booking.findMany({
@@ -28,7 +29,7 @@ export async function findBookingById(id: string) {
 }
 
 export async function findBookingsByTenant(tenantId: string, date?: string) {
-  const where: any = { tenantId }
+  const where: Record<string, unknown> = { tenantId }
   if (date) {
     const start = new Date(`${date}T00:00:00.000Z`)
     const end = new Date(`${date}T23:59:59.999Z`)
