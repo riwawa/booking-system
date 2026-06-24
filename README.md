@@ -1,6 +1,6 @@
-# BookingSystem
+# Booking System
 
-Sistema genérico de agendamento + pagamento + confirmação automática via WhatsApp.
+Sistema de agendamento + pagamento + confirmação automática via WhatsApp.
 Multi-tenant: um deploy, múltiplos clientes, cada um com sua URL e configuração.
 
 ## Stack
@@ -86,19 +86,4 @@ GET    /health
 
 🔒 = requer Authorization: Bearer {token}
 
-## Adaptando para um nicho
 
-O sistema é genérico por design. Para adaptar a um cliente:
-
-1. Edite os labels no frontend (`provider` → `médico`, `service` → `consulta`)
-2. Configure `TenantSettings` no seed ou dashboard
-3. Personalize os templates em `notification.service.ts`
-4. Ajuste `brandColor` no tenant para a cor do cliente
-
-## Deploy no Railway
-
-1. Crie um projeto no Railway
-2. Adicione PostgreSQL e Redis como services
-3. Conecte o repositório GitHub
-4. Configure as variáveis de ambiente
-5. O `deploy.yml` cuida do resto automaticamente
